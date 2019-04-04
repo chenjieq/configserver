@@ -1,4 +1,4 @@
-package com.config.configserver1;
+package com.config.configserver1.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

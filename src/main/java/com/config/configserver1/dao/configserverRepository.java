@@ -1,5 +1,6 @@
-package com.config.configserver1;
+package com.config.configserver1.dao;
 
+import com.config.configserver1.entity.configserver;
 import org.springframework.data.repository.CrudRepository;
 
 
@@ -8,6 +9,6 @@ import org.springframework.data.repository.CrudRepository;
 // CRUD refers Create, Read, Update, Delete
 
 public interface configserverRepository extends CrudRepository<configserver, Integer> {
-   // configserver findByName(String name);
+    Iterable<configserver> findByApplicationAndAprofileAndLabel(String application, String aprofile, String label);
 
 }
