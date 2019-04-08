@@ -10,5 +10,11 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface configserverRepository extends CrudRepository<configserver, Integer> {
     Iterable<configserver> findByApplicationAndAprofileAndLabel(String application, String aprofile, String label);
+    configserver findByAkeyAndApplicationAndAprofileAndLabel(String akey,String application,String aprofile,String label);
+    Iterable<configserver> findByAkey(String akey);
+    Iterable<configserver> findByAvalue(String avalue);
+    Iterable<configserver> findByApplication(String application);
+    Iterable<configserver> findByAprofile(String aprofile);
+    Iterable<configserver> findByLabel(String label);
 
 }
