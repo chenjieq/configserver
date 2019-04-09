@@ -1,5 +1,7 @@
 package com.config.configserver1.service;
 
+import com.config.configserver1.ResponseBody.ResponseResult;
+import com.config.configserver1.ResponseBody.RestResultGenerator;
 import com.config.configserver1.dao.configserverRepository;
 import com.config.configserver1.entity.configserver;
 import org.springframework.stereotype.Service;
@@ -61,7 +63,7 @@ public class configServerService {
 
 
     /**
-     * 根据application查找对象
+     * 根据key查找对象
      *
      * @param akey
      */
@@ -111,12 +113,13 @@ public class configServerService {
      */
 
     @Transactional
-    public String deleteById(int id) {
+    public ResponseResult<configserver> deleteById(int id) {
         if (findById(id) == null)
-            return "Error! Record doesn't exist!";
-        else
+            return RestResultGenerator.genErrorResult("配置信息不存在！");
+           // return "Error! Record doesn't exist!";
+
             configserverRepository.delete(findById(id));
-        return "delete successfully";
+        return RestResultGenerator.genResult(null,"delete successfully");
     }
 
 
@@ -127,14 +130,17 @@ public class configServerService {
      */
 
     @Transactional
-    public String deleteByAkey(String akey) {
-        configserver config = new configserver();
-
-        while (findByApplication(akey).iterator().hasNext()) {
-            config = findByApplication(akey).iterator().next();
+    public ResponseResult<configserver> deleteByAkey(String akey) {
+        configserver config;
+        if(!findByAkey(akey).iterator().hasNext())
+            return RestResultGenerator.genErrorResult("配置信息不存在！");
+           // return "Error! Record doesn't exist!";
+        while (findByAkey(akey).iterator().hasNext()) {
+            config = findByAkey(akey).iterator().next();
             deleteById(config.getId());
         }
-        return "delete successfully";
+        return RestResultGenerator.genResult(null,"delete successfully");
+        //return "delete successfully";
     }
 
 
@@ -145,14 +151,16 @@ public class configServerService {
      */
 
     @Transactional
-    public String deleteByAvalue(String avalue) {
-        configserver config = new configserver();
-
-        while (findByApplication(avalue).iterator().hasNext()) {
-            config = findByApplication(avalue).iterator().next();
+    public ResponseResult<configserver> deleteByAvalue(String avalue) {
+        configserver config;
+         if(!findByAvalue(avalue).iterator().hasNext())
+             return RestResultGenerator.genErrorResult("配置信息不存在！");
+        while (findByAvalue(avalue).iterator().hasNext()) {
+            config = findByAvalue(avalue).iterator().next();
             deleteById(config.getId());
         }
-        return "delete successfully";
+        return RestResultGenerator.genResult(null,"delete successfully");
+        // return "delete successfully";
     }
 
 
@@ -163,14 +171,16 @@ public class configServerService {
      */
 
     @Transactional
-    public String deleteByApplication(String application) {
-        configserver config = new configserver();
-
+    public ResponseResult<configserver> deleteByApplication(String application) {
+        configserver config;
+        if(!findByApplication(application).iterator().hasNext())
+            return RestResultGenerator.genErrorResult("配置信息不存在！");
         while (findByApplication(application).iterator().hasNext()) {
             config = findByApplication(application).iterator().next();
             deleteById(config.getId());
         }
-        return "delete successfully";
+        return RestResultGenerator.genResult(null,"delete successfully");
+        // return "delete successfully";
     }
 
 
@@ -181,14 +191,16 @@ public class configServerService {
      */
 
     @Transactional
-    public String deleteByAprofile(String aprofile) {
-        configserver config = new configserver();
-
-        while (findByApplication(aprofile).iterator().hasNext()) {
+    public ResponseResult<configserver>deleteByAprofile(String aprofile) {
+        configserver config;
+        if(!findByAprofile(aprofile).iterator().hasNext())
+            return RestResultGenerator.genErrorResult("配置信息不存在！");
+        while (findByAprofile(aprofile).iterator().hasNext()) {
             config = findByAprofile(aprofile).iterator().next();
             deleteById(config.getId());
         }
-        return "delete successfully";
+        //return "delete successfully";
+        return RestResultGenerator.genResult(null,"delete successfully");
     }
 
 
@@ -199,14 +211,16 @@ public class configServerService {
      */
 
     @Transactional
-    public String deleteByLabel(String label) {
-        configserver config = new configserver();
-
+    public ResponseResult<configserver> deleteByLabel(String label) {
+        configserver config;
+        if(!findByLabel(label).iterator().hasNext())
+            return RestResultGenerator.genErrorResult("配置信息不存在！");
         while (findByLabel(label).iterator().hasNext()) {
             config = findByLabel(label).iterator().next();
-            return deleteById(config.getId());
+            deleteById(config.getId());
         }
-        return "delete successfully";
+        //return "delete successfully";
+        return RestResultGenerator.genResult(null,"delete successfully");
     }
 
 
@@ -217,24 +231,30 @@ public class configServerService {
      */
 
     @Transactional
-    public configserver update(configserver config) {
+    public ResponseResult<configserver> update(configserver config) {
 
         //根据id找到需要更新的对象, json体里id 信息是必须的。
+        if(config.getId() == null) return RestResultGenerator.genErrorResult("必须提供id信息！");
         configserver config1 = findById(config.getId());
-        if (findById(config.getId()) == null)
-            configAdd(config);
-        else if (!config.getAkey().isEmpty())
-            config1.setAkey(config.getAkey());
-        if (!config.getAvalue().isEmpty())
-            config1.setAvalue(config.getAvalue());
-        if (!config.getApplication().isEmpty())
-            config1.setApplication(config.getApplication());
-        if (!config.getAprofile().isEmpty())
-            config1.setAprofile(config.getAprofile());
-        if (!config.getlabel().isEmpty())
-            config1.setlabel(config.getlabel());
+        if (config1!=null){
+            if (config.getAkey() != null)
+                config1.setAkey(config.getAkey());
+            if (config.getAvalue()!= null)
+                config1.setAvalue(config.getAvalue());
+            if (config.getApplication()!= null)
+                config1.setApplication(config.getApplication());
+            if (config.getAprofile()!= null)
+                config1.setAprofile(config.getAprofile());
+            if (config.getlabel()!= null)
+                config1.setlabel(config.getlabel());
+        }
+        else return RestResultGenerator.genErrorResult("该配置信息不存在，请选择添加操作！");
 
-        return save(config1);
+         //   configAdd(config);
+
+
+        save(config1);
+        return RestResultGenerator.genResult(config1,"更新成功！");
 
     }
 
@@ -246,23 +266,29 @@ public class configServerService {
      */
     @Transactional
     //todo: 1.add需要保证所有项都不为空； 2.add 中id 只能自动生成且保证唯一性，不能手动添加。3.支持多条增加
-    public configserver configAdd(configserver config) {
-        configserver config1 = new configserver();
-        if(config.getId()!= null) return null;
+    public ResponseResult<configserver> configAdd(configserver config) {
+      configserver config1 = new configserver();
+        if(config.getId()!= null) return RestResultGenerator.genErrorResult("不能手动提供id");
         if (configserverRepository.findByAkeyAndApplicationAndAprofileAndLabel
-                (config.getAkey(), config.getApplication(), config.getAprofile(), config.getlabel()).getId() == null) {
-            if (!config.getAkey().isEmpty())
+                (config.getAkey(), config.getApplication(), config.getAprofile(), config.getlabel()) == null) {
+            if (config.getAkey() != null)
                 config1.setAkey(config.getAkey());
-            if (!config.getAvalue().isEmpty())
+            else return RestResultGenerator.genErrorResult("akey值不能为空！");
+            if (config.getAvalue() !=null)
                 config1.setAvalue(config.getAvalue());
-            if (!config.getApplication().isEmpty())
+            else return RestResultGenerator.genErrorResult("avalue值不能为空！");
+            if (config.getApplication() !=null)
                 config1.setApplication(config.getApplication());
-            if (!config.getAprofile().isEmpty())
+            else return RestResultGenerator.genErrorResult("application值不能为空！");
+            if (config.getAprofile()!=null)
                 config1.setAprofile(config.getAprofile());
-            if (!config.getlabel().isEmpty())
+            else return RestResultGenerator.genErrorResult("aprofile值不能为空！");
+            if (config.getlabel()!=null)
                 config1.setlabel(config.getlabel());
-        }
-        return save(config1);
+            else return RestResultGenerator.genErrorResult("label值不能为空！");
+        } else return RestResultGenerator.genErrorResult("该配置信息已存在，请选择更新操作！");
+        save(config1);
+        return RestResultGenerator.genResult(config1,"添加成功！");
     }
 
 
@@ -271,8 +297,8 @@ public class configServerService {
      */
     @Transactional
     //todo: 1.add需要保证所有项都不为空； 2.add 中id 只能自动生成且保证唯一性，不能手动添加。3.支持多条增加
-    public String configAdd(Iterable<configserver> config) {
-        configserver config1 = new configserver();
+    public String configAdd1(Iterable<configserver> config) {
+        configserver config1;
         while (config.iterator().hasNext()) {
             config1 = config.iterator().next();
             configAdd(config1);
