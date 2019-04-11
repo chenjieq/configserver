@@ -9,7 +9,7 @@ import com.config.configserver1.service.configServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin(methods = { RequestMethod.GET})
 @RefreshScope
 @RestController    // This means that this class is a Controller
 @RequestMapping(path="/configserver") // This means URL's start with /demo (after Application path)
@@ -29,7 +29,7 @@ public class configserverController {
         //return ConfigserverService.findAll();
     }
 
-
+   // @CrossOrigin(origins = "http://localhost:8888", methods = RequestMethod.GET)
     @GetMapping (value = "get/{id}")
     public ResponseResult<configserver> findConfigById(@PathVariable("id") Integer id){
 
