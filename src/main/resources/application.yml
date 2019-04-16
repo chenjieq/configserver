@@ -1,6 +1,7 @@
-management:
-  endpoints:
-    web:
-      exposure:
-       include: bus-refresh,refresh,info,env
 
+
+
+
+#  management:
+#    security:
+#      enabled: false

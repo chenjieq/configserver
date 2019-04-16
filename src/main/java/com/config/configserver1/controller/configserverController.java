@@ -9,7 +9,7 @@ import com.config.configserver1.service.configServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
-@CrossOrigin(methods = { RequestMethod.GET})
+//@CrossOrigin(methods = RequestMethod.GET)
 @RefreshScope
 @RestController    // This means that this class is a Controller
 @RequestMapping(path="/configserver") // This means URL's start with /demo (after Application path)
@@ -90,7 +90,7 @@ public class configserverController {
         return RestResultGenerator.genResult(configs,"成功！");
         //return ConfigserverService.findByAPL(app, pro, label);
     }
-
+    //@CrossOrigin(origins = "http://localhost:8888", methods = RequestMethod.POST)
     @PostMapping(value = "/add")
     public ResponseResult<configserver> configAdd(@RequestBody configserver config){
         return ConfigserverService.configAdd(config);
@@ -102,13 +102,13 @@ public class configserverController {
 //        return ConfigserverService.configAdd1(config);
 //
 //    }
-
+//@CrossOrigin(origins = "http://localhost:8888", methods = RequestMethod.PUT)
     @PutMapping(value = "/update")
     public ResponseResult<configserver> configUpdate(@RequestBody configserver config){
        return ConfigserverService.update(config);
 
     }
-
+  //  @CrossOrigin(origins = "http://localhost:8888", methods = RequestMethod.DELETE)
     @DeleteMapping(value = "delete/{id}")
     public ResponseResult<configserver> deleteById(@PathVariable("id") Integer id) {
 
@@ -116,7 +116,7 @@ public class configserverController {
 
 
     }
-
+  //  @CrossOrigin(origins = "http://localhost:8888", methods = RequestMethod.DELETE)
     @DeleteMapping(value = "delete/akey")
     public ResponseResult<configserver> deleteByAkey(@RequestParam String akey) {
 
@@ -124,7 +124,7 @@ public class configserverController {
 
 
     }
-
+   // @CrossOrigin(origins = "http://localhost:8888", methods = RequestMethod.DELETE)
     @DeleteMapping(value = "delete/avalue")
     public ResponseResult<configserver> deleteByAvalue(@RequestParam String avalue) {
 
@@ -132,7 +132,7 @@ public class configserverController {
 
 
     }
-
+  //  @CrossOrigin(origins = "http://localhost:8888", methods = RequestMethod.DELETE)
     @DeleteMapping(value = "delete/application")
     public ResponseResult<configserver> deleteByApplication(@RequestParam String app) {
 
@@ -140,7 +140,7 @@ public class configserverController {
 
 
     }
-
+  //  @CrossOrigin(origins = "http://localhost:8888", methods = RequestMethod.DELETE)
     @DeleteMapping(value = "delete/aprofile")
     public ResponseResult<configserver> deleteByAprofile(@RequestParam String aprofile) {
 
@@ -148,7 +148,7 @@ public class configserverController {
 
 
     }
-
+   // @CrossOrigin(origins = "http://localhost:8888", methods = RequestMethod.DELETE)
     @DeleteMapping(value = "delete/label")
     public ResponseResult<configserver> deleteByLabel(@RequestParam String label) {
 
